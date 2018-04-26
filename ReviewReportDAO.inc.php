@@ -38,7 +38,6 @@ class ReviewReportDAO extends DAO {
 			)
 		));
 
-		$isSqlServer = Config::getVar('database', 'ms_sql');
 		$reviewsReturner = new DBRowIterator($this->retrieve(
 			'SELECT	r.stage_id AS stage_id,
 				r.round AS round,
@@ -54,7 +53,7 @@ class ReviewReportDAO extends DAO {
 				r.date_confirmed AS dateConfirmed,
 				r.date_completed AS dateCompleted,
 				r.date_reminded AS dateReminded,
-				(' . ($isSqlServer ? 'CASE WHEN r.declined = 1 THEN 1 ELSE 0 END' : 'r.declined=1') . ') AS declined,
+				(CASE WHEN r.declined = 1 THEN 1 ELSE 0 END) AS declined,
 				r.recommendation AS recommendation
 			FROM	review_assignments r
 				LEFT JOIN submissions a ON r.submission_id = a.submission_id
